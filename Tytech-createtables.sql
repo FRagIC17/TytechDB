@@ -45,7 +45,6 @@ CREATE TABLE Catalog.Inventory
     inventory_id INT IDENTITY (1,1) PRIMARY KEY,
     product_id INT NOT NULL,
     inventory_quantity INT NOT NULL,
-    inventory_product_name NVARCHAR (255) NOT NULL,
     inventory_last_updated DATETIME,
     FOREIGN KEY (product_id) REFERENCES Catalog.Products (product_id)
 );
@@ -56,9 +55,9 @@ CREATE TABLE Customers.Customer
     customer_firstname VARCHAR (50) NOT NULL,
     customer_lastname VARCHAR (75) NOT NULL,
     customer_email NVARCHAR (75) NOT NULL,
-    customer_phone VARCHAR(20),
+    customer_phone BIGINT,
     customer_address NVARCHAR (100) NOT NULL,
-    customer_postalcode VARCHAR(20) NOT NULL, 
+    customer_postalcode INT NOT NULL,
     customer_city VARCHAR (50) NOT NULL,
     customer_country VARCHAR (50),
     customer_created_at DATETIME,
@@ -68,10 +67,10 @@ CREATE TABLE Customers.Customer
 CREATE TABLE Sales.StatusEnnums
 (
     status_id INT IDENTITY (1,1) PRIMARY KEY,
-    shipment_status VARCHAR (10) NOT NULL,
-    returns_status VARCHAR (9) NOT NULL,
-    payment_status VARCHAR (10) NOT NULL,
-    order_status NVARCHAR(20) NOT NULL
+    shipment_status VARCHAR (13) NOT NULL,
+    returns_status VARCHAR (13) NOT NULL,
+    payment_status VARCHAR (13) NOT NULL,
+    order_status NVARCHAR(13) NOT NULL
 );
 
 CREATE TABLE Sales.Orders
@@ -80,7 +79,7 @@ CREATE TABLE Sales.Orders
     customer_id INT NOT NULL,
     order_date DATETIME NOT NULL,
     status_id INT NOT NULL,
-    order_total_amount DECIMAL(10,2) NOT NULL,
+    order_total_amount INT NOT NULL,
     FOREIGN KEY (status_id) REFERENCES Sales.StatusEnnums (status_id),
     FOREIGN KEY (customer_id) REFERENCES Customers.Customer (customer_id)
 );
@@ -90,9 +89,9 @@ CREATE TABLE Sales.Order_lines
     ol_id INT IDENTITY (1,1) PRIMARY KEY,
     order_id INT,
     product_id INT,
+    customer_id INT,
     ol_quantity INT NOT NULL,
-    ol_unit_price DECIMAL(10,2) NOT NULL,
-    ol_discount FLOAT,
+    FOREIGN KEY (customer_id) REFERENCES Customers.Customer (customer_id),
     FOREIGN KEY (order_id) REFERENCES Sales.Orders (order_id),
     FOREIGN KEY (product_id) REFERENCES Catalog.Products (product_id)
 );
@@ -101,9 +100,8 @@ CREATE TABLE Sales.Payments
 (
     payment_id INT IDENTITY (1,1) PRIMARY KEY,
     order_id INT,
-    payment_date DATETIME NOT NULL,
+    payment_date DATETIME NOT NULL, 
     payment_method VARCHAR (20) NOT NULL,
-    payment_amount DECIMAL(10,2) NOT NULL,
     status_id INT NOT NULL,
     FOREIGN KEY (status_id) REFERENCES Sales.StatusEnnums (status_id),
     FOREIGN KEY (order_id) REFERENCES Sales.Orders (order_id)
@@ -127,11 +125,20 @@ CREATE TABLE Sales.ReturnOrders
     returnorders_id INT IDENTITY (1,1) PRIMARY KEY,
     order_id INT,
     product_id INT,
-    returns_quantity INT NOT NULL,
-    returns_reason VARCHAR (500) NOT NULL,
+    return_reason VARCHAR (500) NOT NULL,
     status_id INT NOT NULL,
-    returns_date DATETIME NOT NULL,
+    return_date DATETIME NOT NULL,
     FOREIGN KEY (status_id) REFERENCES Sales.StatusEnnums (status_id),
     FOREIGN KEY (order_id) REFERENCES Sales.Orders (order_id),
+    FOREIGN KEY (product_id) REFERENCES Catalog.Products (product_id)
+);
+
+CREATE TABLE Promotions.Discounts
+(
+    discount_id INT IDENTITY (1,1) PRIMARY KEY,
+    discount_startdate date,
+    discount_enddate date,
+    discount_value NVARCHAR(3),
+    product_id INT,
     FOREIGN KEY (product_id) REFERENCES Catalog.Products (product_id)
 );
