@@ -138,11 +138,12 @@ EXEC pProductPriceRollBack 'Keyboard Also 589', 1;
 EXEC Catalog.pDeleteProduct @product_id = 303;
 
 EXEC Catalog.pInsertNewProduct 
-    @product_name = 'Pik',
-    @product_description = 'Kæmpe stor pik',
+    @product_name = 'keyboard',
+    @product_description = 'good',
     @product_price = 29.99,
     @category_id = 1,
     @supplier_id = 1,
     @initial_quantity = 50;
+
 
 SELECT * FROM Catalog.Products
