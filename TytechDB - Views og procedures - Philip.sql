@@ -20,8 +20,8 @@ SELECT
     s.supplier_name,
     i.inventory_quantity
 FROM Catalog.Products p
-INNER JOIN Catalog.Categories c ON p.category_id = c.category_id
-INNER JOIN Catalog.Suppliers s ON p.supplier_id = s.supplier_id
+LEFT JOIN Catalog.Categories c ON p.category_id = c.category_id
+LEFT JOIN Catalog.Suppliers s ON p.supplier_id = s.supplier_id
 LEFT JOIN Catalog.Inventory i ON p.product_id = i.product_id
 
 SELECT * FROM Catalog.ProductCatalog
@@ -243,4 +243,5 @@ SELECT * FROM Catalog.Products
 
 --DBCC CHECKTABLE ('Catalog.Products')
 --DBCC CHECKDB ('TytechDB')
+
 
