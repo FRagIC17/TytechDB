@@ -191,21 +191,21 @@ BEGIN
 END;
 GO
 
-EXEC Catalog.pGetProductsByCategory @category_name = 'speakers';
+--EXEC Catalog.pGetProductsByCategory @category_name = 'speakers';
 
-EXEC pProductPriceRollBack 'Keyboard Also 589', 1;
+--EXEC pProductPriceRollBack 'Keyboard Also 589', 1;
 
-EXEC Catalog.pDeleteProduct @product_id = 303;
+--EXEC Catalog.pDeleteProduct @product_id = 303;
 
-EXEC Catalog.pInsertNewProduct 
-    @product_name = 'produktnavn',
-    @product_description = 'dette er en beskrivelse',
-    @product_price = 29.99,
-    @category_id = 1,
-    @supplier_id = 1,
-    @initial_quantity = 50;
+--EXEC Catalog.pInsertNewProduct 
+    --@product_name = 'produktnavn',
+    --@product_description = 'dette er en beskrivelse',
+    --@product_price = 29.99,
+    --@category_id = 1,
+    --@supplier_id = 1,
+    --@initial_quantity = 50;
 
-SELECT * FROM Catalog.Products
+--SELECT * FROM Catalog.Products
 
 --opgave 16
 --USE TytechDB
@@ -249,6 +249,7 @@ SELECT * FROM Catalog.Products
 
 --DBCC CHECKTABLE ('Catalog.Products')
 --DBCC CHECKDB ('TytechDB')
+
 
 
 
