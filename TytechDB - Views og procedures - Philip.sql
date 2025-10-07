@@ -147,7 +147,9 @@ CREATE PROCEDURE Catalog.pInsertNewProduct
     @product_price DECIMAL(10,2),
     @product_image_url NVARCHAR(MAX) = NULL,
     @product_active BIT,
-    @product_published DATETIME = NULL
+    @product_published DATETIME = NULL,
+    @category_id INT,
+    @supplier_id INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -161,7 +163,9 @@ BEGIN
             product_price,
             product_image_url,
             product_published,
-            product_active
+            product_active,
+            category_id,
+            supplier_id
         )
         VALUES (
             @product_name,
@@ -169,7 +173,9 @@ BEGIN
             @product_price,
             @product_image_url,
             ISNULL(@product_published, GETDATE()),
-            1 -- Set as active by default
+            @product_active,
+            @category_id,
+            @supplier_id
         );
 
         DECLARE @new_product_id INT = SCOPE_IDENTITY();
@@ -243,5 +249,6 @@ SELECT * FROM Catalog.Products
 
 --DBCC CHECKTABLE ('Catalog.Products')
 --DBCC CHECKDB ('TytechDB')
+
 
 
