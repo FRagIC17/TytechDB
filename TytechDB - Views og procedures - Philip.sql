@@ -146,64 +146,44 @@ CREATE PROCEDURE Catalog.pInsertNewProduct
     @product_description NVARCHAR(1000) = NULL,
     @product_price DECIMAL(10,2),
     @product_image_url NVARCHAR(MAX) = NULL,
-    @product_published DATETIME = NULL,
-    @category_id INT = NULL,
-    @supplier_id INT = NULL,
-    @initial_quantity INT = 0
+    @product_active BIT,
+    @product_published DATETIME = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     BEGIN TRANSACTION;
-    
-    INSERT INTO Catalog.Products (
-        product_name,
-        product_description,
-        product_price,
-        product_image_url,
-        product_published,
-        product_active,
-        category_id,
-        supplier_id
-    )
-    VALUES (
-        @product_name,
-        @product_description,
-        @product_price,
-        @product_image_url,
-        ISNULL(@product_published, GETDATE()),
-        1, -- Set as active by default
-        @category_id,
-        @supplier_id
-    );
-    
-    DECLARE @new_product_id INT = SCOPE_IDENTITY();
-    
-    IF @initial_quantity > 0
-    BEGIN
-        INSERT INTO Catalog.Inventory (
-            product_id,
-            inventory_quantity,
-            inventory_last_updated
+
+    BEGIN TRY
+        INSERT INTO Catalog.Products (
+            product_name,
+            product_description,
+            product_price,
+            product_image_url,
+            product_published,
+            product_active
         )
         VALUES (
-            @new_product_id,
-            @initial_quantity,
-            GETDATE()
+            @product_name,
+            @product_description,
+            @product_price,
+            @product_image_url,
+            ISNULL(@product_published, GETDATE()),
+            1 -- Set as active by default
         );
-    END;
-    
-    IF @supplier_id IS NOT NULL
-    BEGIN
-        INSERT INTO Catalog.SupplierProducts (supplier_id, product_id)
-        VALUES (@supplier_id, @new_product_id);
-    END;
-    
-    COMMIT TRANSACTION;
-    
 
-    SELECT @new_product_id AS new_product_id;
+        DECLARE @new_product_id INT = SCOPE_IDENTITY();
+
+        COMMIT TRANSACTION;
+
+        SELECT @new_product_id AS new_product_id;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 GO
-
 
 EXEC Catalog.pGetProductsByCategory @category_name = 'speakers';
 
@@ -226,7 +206,7 @@ SELECT * FROM Catalog.Products
 --GO
 
 --SELECT * FROM Catalog.Products ORDER BY Product_name;
---SELECT * FROM Catalog.Products ORDER BY product_price desc; --desc er dyreste først, asc er billigste først
+--SELECT * FROM Catalog.Products ORDER BY product_price desc; --desc er dyreste fÃ¸rst, asc er billigste fÃ¸rst
 
 --SELECT 
 --    c.category_name,
@@ -263,3 +243,4 @@ SELECT * FROM Catalog.Products
 
 --DBCC CHECKTABLE ('Catalog.Products')
 --DBCC CHECKDB ('TytechDB')
+
