@@ -1,0 +1,86 @@
+﻿<Window x:Class="Tytech_Application.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="600" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+            <Button x:Name="ProductsNavButton" Content="Products" Width="100" Margin="6" Click="ProductsNavButton_Click"/>
+            <Button x:Name="CustomersNavButton" Content="Customers" Width="100" Margin="6" Click="CustomersNavButton_Click"/>
+            <Button x:Name="OrdersNavButton" Content="Orders" Width="100" Margin="6" Click="OrdersNavButton_Click"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Grid.Column="0" Margin="8,8,8,0" VerticalAlignment="Top" Background="#FFF" CornerRadius="6" BorderBrush="#DDD" BorderThickness="1" Height="487">
+            <GroupBox Header="Add New Product" Margin="8,8,8,-1">
+                <StackPanel Margin="8">
+                    <TextBlock Text="Product Name" Margin="0,4,0,0"/>
+                    <TextBox x:Name="ProductNameBox" Height="28" VerticalContentAlignment="Center" Margin="0,2,0,0"/>
+
+                    <TextBlock Text="Description" Margin="0,4,0,0"/>
+                    <TextBox x:Name="ProductDescriptionBox" Height="60" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Margin="0,2,0,0"/>
+
+                    <TextBlock Text="Price" Margin="0,4,0,0"/>
+                    <TextBox x:Name="ProductPriceBox" Height="28" VerticalContentAlignment="Center" Margin="0,2,0,0"/>
+
+                    <TextBlock Text="Image URL" Margin="0,4,0,0"/>
+                    <TextBox x:Name="ProductImageUrlBox" Height="28" VerticalContentAlignment="Center" Margin="0,2,0,0"/>
+
+                    <TextBlock Text="Category" Margin="0,4,0,0"/>
+                    <ComboBox x:Name="cbCategory" Height="28" VerticalContentAlignment="Center" Margin="0,2,0,0">
+                        
+                    </ComboBox>
+                    <TextBlock Text="Supplier" Margin="0,4,0,0"/>
+                    <ComboBox x:Name="cbSupplier" Height="28" VerticalContentAlignment="Center" Margin="0,2,0,0">
+                        
+                    </ComboBox>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Published" Margin="0,0,0,2"/>
+                            <DatePicker x:Name="ProductPublishedPicker" Height="28"/>
+                        </StackPanel>
+                        <CheckBox x:Name="ProductActiveCheckBox" Content="Active" Margin="16,18,0,0" Height="28" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button x:Name="InsertButton" Content="Insert Product" Width="140" Height="32" Margin="0,16,0,0" HorizontalAlignment="Left" Click="InsertButton_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </Border>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16">
+            <Button x:Name="DeleteButton" Content="Delete" Width="90" Click="DeleteButton_Click"/>
+        </StackPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="8">
+            <DataGrid x:Name="ProductsDataGrid"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionChanged="ProductsDataGrid_SelectionChanged"
+                      Height="320"
+                      DockPanel.Dock="Top"
+                      Margin="0,0,0,8">
+            </DataGrid>
+
+            <TextBox x:Name="SelectedRowOutput"
+                     IsReadOnly="True"
+                     Text="Select a row to see details..."
+                     Height="120"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Margin="0,8,0,0"/>
+        </DockPanel>
+
+    </Grid>
+</Window>
+
+<!-- auto reload ide fra mathias INotifyPropertyChange - ICommand bruger man sammen med Bindings til RelayCommand -->
